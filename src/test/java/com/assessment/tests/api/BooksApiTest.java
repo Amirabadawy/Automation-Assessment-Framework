@@ -4,6 +4,7 @@ import com.assessment.api.model.Book;
 import com.assessment.api.model.ProblemDetails;
 import com.assessment.utils.TestDataReader;
 import io.restassured.common.mapper.TypeRef;
+import org.apache.http.HttpStatus;
 import java.util.List;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -14,9 +15,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 public class BooksApiTest extends BaseApiTest {
-    private static final int OK = 200;
-    private static final int NOT_FOUND = 404;
-
     @DataProvider(name = "newBooks")
     public Object[][] newBooks() {
         return new Object[][]{
@@ -39,7 +37,7 @@ public class BooksApiTest extends BaseApiTest {
         List<Book> books = booksApi.getBooks()
                 .then()
                 .log().ifValidationFails()
-                .statusCode(OK)
+                .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .as(new TypeRef<List<Book>>() {
                 });
@@ -52,7 +50,7 @@ public class BooksApiTest extends BaseApiTest {
         Book book = booksApi.getBookById(existingBookId)
                 .then()
                 .log().ifValidationFails()
-                .statusCode(OK)
+                .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .as(Book.class);
 
@@ -66,7 +64,7 @@ public class BooksApiTest extends BaseApiTest {
         Book actualBook = booksApi.createBook(expectedBook)
                 .then()
                 .log().ifValidationFails()
-                .statusCode(OK)
+                .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .as(Book.class);
 
@@ -87,11 +85,11 @@ public class BooksApiTest extends BaseApiTest {
         ProblemDetails problem = booksApi.getBookById(invalidBookId)
                 .then()
                 .log().ifValidationFails()
-                .statusCode(NOT_FOUND)
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .extract()
                 .as(ProblemDetails.class);
 
-        assertEquals(problem.getStatus(), NOT_FOUND);
+        assertEquals(problem.getStatus(), HttpStatus.SC_NOT_FOUND);
         assertEquals(problem.getTitle(), TestDataReader.get("book.not.found.title"));
         assertNotNull(problem.getTraceId(), "Problem response should include a trace id.");
     }
