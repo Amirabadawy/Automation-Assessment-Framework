@@ -16,7 +16,7 @@ public class FileUploadPage extends BasePage<FileUploadPage> {
     }
 
     public FileUploadPage uploadFile(Path filePath) {
-        type(fileInput, filePath.toAbsolutePath().toString());
+        uploadFile(fileInput, filePath.toAbsolutePath().toString());
         return self();
     }
 

@@ -48,19 +48,18 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        ExtentTest test = extentReports.createTest(result.getMethod().getQualifiedName());
-        CURRENT_TEST.set(test);
+        CURRENT_TEST.set(createTest(result));
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        CURRENT_TEST.get().pass("Test passed");
+        currentTest(result).pass("Test passed");
         CURRENT_TEST.remove();
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        ExtentTest test = CURRENT_TEST.get();
+        ExtentTest test = currentTest(result);
         test.fail(result.getThrowable());
 
         Path screenshot = captureScreenshot(result);
@@ -77,7 +76,7 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        CURRENT_TEST.get().log(Status.SKIP, result.getThrowable());
+        currentTest(result).log(Status.SKIP, result.getThrowable());
         CURRENT_TEST.remove();
     }
 
@@ -97,6 +96,19 @@ public class ExtentReportListener implements ITestListener {
         } catch (IOException exception) {
             throw new IllegalStateException("Unable to create report directories.", exception);
         }
+    }
+
+    private static ExtentTest currentTest(ITestResult result) {
+        ExtentTest test = CURRENT_TEST.get();
+        if (test == null) {
+            test = createTest(result);
+            CURRENT_TEST.set(test);
+        }
+        return test;
+    }
+
+    private static ExtentTest createTest(ITestResult result) {
+        return extentReports.createTest(result.getMethod().getQualifiedName());
     }
 
     private static Path captureScreenshot(ITestResult result) {
@@ -121,7 +133,7 @@ public class ExtentReportListener implements ITestListener {
             Files.write(screenshotPath, screenshotBytes);
             return screenshotPath;
         } catch (RuntimeException | IOException exception) {
-            CURRENT_TEST.get().warning("Unable to capture failure screenshot: " + exception.getMessage());
+            currentTest(result).warning("Unable to capture failure screenshot: " + exception.getMessage());
             return null;
         }
     }

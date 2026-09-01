@@ -35,6 +35,10 @@ public abstract class BasePage<T extends BasePage<T>> {
         element.sendKeys(value);
     }
 
+    protected void uploadFile(By locator, String filePath) {
+        visible(locator).sendKeys(filePath);
+    }
+
     protected String textOf(By locator) {
         return visible(locator).getText();
     }
