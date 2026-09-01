@@ -1,0 +1,18 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Automation Assessment Suite" parallel="methods" thread-count="2">
+  <listeners>
+    <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    <listener class-name="com.assessment.reporting.ExtentReportListener"/>
+  </listeners>
+  <test name="FakeRESTApi Bookstore API Tests">
+    <classes>
+      <class name="com.assessment.tests.api.BooksApiTest"/>
+    </classes>
+  </test>
+  <test name="Herokuapp GUI Tests">
+    <classes>
+      <class name="com.assessment.tests.gui.FileUploadTest"/>
+      <class name="com.assessment.tests.gui.DynamicLoadingTest"/>
+    </classes>
+  </test>
+</suite>
