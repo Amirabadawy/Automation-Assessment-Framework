@@ -99,6 +99,29 @@ Generate the Allure HTML report from existing results:
 mvn allure:report
 ```
 
+## CI/CD
+
+GitHub Actions workflow is configured in `.github/workflows/ci.yml`.
+
+The workflow runs on:
+
+- Push to `main`
+- Pull request to `main`
+- Manual trigger from the GitHub Actions tab
+
+The pipeline uses Java 17 and runs:
+
+```bash
+mvn clean verify -Dheadless=true
+```
+
+After each run, GitHub Actions uploads these artifacts:
+
+- Surefire reports
+- Extent report
+- Allure HTML report
+- Allure raw results
+
 ## Configuration
 
 Default values are in `src/test/resources/config.properties`.
