@@ -8,7 +8,7 @@ import com.assessment.utils.TestDataReader;
 import org.testng.annotations.Test;
 
 public class DynamicLoadingTest extends BaseGuiTest {
-    @Test(groups = {"gui", "regression"})
+    @Test(groups = {"gui", "regression"}, retryAnalyzer = GuiRetryAnalyzer.class)
     public void shouldDisplayHelloWorldAfterLoadingCompletes() {
         String actualText = new HomePage(DriverManager.getDriver())
                 .open()

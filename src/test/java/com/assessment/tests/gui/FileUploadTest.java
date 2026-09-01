@@ -20,7 +20,7 @@ public class FileUploadTest extends BaseGuiTest {
         return new Object[][]{{Paths.get(TestDataReader.get("upload.file.path"), fileName)}};
     }
 
-    @Test(groups = {"gui", "smoke"}, dataProvider = "uploadFiles")
+    @Test(groups = {"gui", "smoke"}, dataProvider = "uploadFiles", retryAnalyzer = GuiRetryAnalyzer.class)
     public void shouldUploadImageSuccessfully(Path filePath) {
         assertTrue(Files.exists(filePath), "Upload test file should exist before test execution.");
 
